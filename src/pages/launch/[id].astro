@@ -1,0 +1,26 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getLaunchBy } from "../../services/spacex";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+let launch;
+if (id) {
+  launch = await getLaunchBy({ id });
+}
+---
+
+<Layout title={`Launch ${launch?.name} 🚀`}>
+  <article class="rounded-lg border shadow-md bg-gray-800 border-gray-700  hover:bg-gray-700 hover:border-gray-500 transition flex flex-col gap-y-4 py-8 px-4 mx-auto max-w-xl lg:py-16 lg:px-6 text-start">
+    <img
+      class="self-center w-52 h-auto"
+      src={launch?.links?.patch.small === null ? "https://images2.imgbox.com/a9/9a/NXVkTZCE_o.png" : launch?.links?.patch.small}
+      alt={launch?.name}
+    />
+    <h2 class="text-4xl text-white font-bold">{launch?.name}</h2>
+    <h3 class="text-xl text-white font-medium">Identification number: <span class="text-orange-400">{launch?.id}</span></h3>
+    <p class="text-xl text-white font-medium">{launch?.details && "Details: "} <span class="text-lg text-orange-400">{launch?.details}</span></p>
+  </article>
+</Layout>
